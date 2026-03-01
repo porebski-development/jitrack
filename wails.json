@@ -24,8 +24,8 @@
     "darwin": {
       "dmg": {
         "title": "JITRACK Installer",
-        "icon": "build/appicon.png",
-        "background": "build/dmg-background.png",
+        "icon": "assets/appicon.png",
+        "background": "assets/dmg-background.png",
         "windowSize": {
           "width": 600,
           "height": 400

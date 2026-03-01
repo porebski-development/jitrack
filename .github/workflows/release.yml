@@ -29,6 +29,9 @@ jobs:
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
+      - name: Install create-dmg
+        run: brew install create-dmg
+
       - name: Install frontend dependencies
         run: cd frontend && npm install
 
@@ -40,12 +43,23 @@ jobs:
           VERSION: ${{ github.ref_name }}
         run: wails build -platform darwin/arm64 -ldflags "-s -w -X main.version=$VERSION"
 
-      - name: Package macOS DMG
+      - name: Create macOS DMG
         run: |
           cd build/bin
           mv jitrack.app JITRACK.app
-          # Create DMG with create-dmg or hdiutil
-          hdiutil create -volname "JITRACK Installer" -srcfolder JITRACK.app -ov -format UDZO JITRACK-macOS-arm64.dmg
+          # Create DMG with custom layout using create-dmg
+          create-dmg \
+            --volname "JITRACK Installer" \
+            --volicon "../../assets/appicon.png" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --icon "JITRACK.app" 180 200 \
+            --hide-extension "JITRACK.app" \
+            --app-drop-link 420 200 \
+            --no-internet-enable \
+            "JITRACK-macOS-arm64.dmg" \
+            "JITRACK.app"
 
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
