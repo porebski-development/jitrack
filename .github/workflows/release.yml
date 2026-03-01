@@ -29,21 +29,29 @@ jobs:
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
+      - name: Install frontend dependencies
+        run: cd frontend && npm install
+
+      - name: Generate Wails bindings
+        run: wails generate bindings
+
       - name: Build macOS
         env:
           VERSION: ${{ github.ref_name }}
         run: wails build -platform darwin/arm64 -ldflags "-s -w -X main.version=$VERSION"
 
-      - name: Package macOS
+      - name: Package macOS DMG
         run: |
           cd build/bin
-          zip -r ../../JITRACK-macOS-arm64.zip jitrack.app
+          mv jitrack.app JITRACK.app
+          # Create DMG with create-dmg or hdiutil
+          hdiutil create -volname "JITRACK Installer" -srcfolder JITRACK.app -ov -format UDZO JITRACK-macOS-arm64.dmg
 
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
         with:
           name: macos-build
-          path: JITRACK-macOS-arm64.zip
+          path: build/bin/JITRACK-macOS-arm64.dmg
 
   build-windows:
     runs-on: windows-latest
@@ -63,6 +71,12 @@ jobs:
 
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Install frontend dependencies
+        run: cd frontend && npm install
+
+      - name: Generate Wails bindings
+        run: wails generate bindings
 
       - name: Build Windows
         env:
@@ -96,6 +110,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            JITRACK-macOS-arm64.zip
+            JITRACK-macOS-arm64.dmg
             JITRACK-Windows-amd64.exe
           generate_release_notes: true

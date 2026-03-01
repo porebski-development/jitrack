@@ -19,7 +19,7 @@ Pre-built binaries are available in [GitHub Releases](https://github.com/porebsk
 
 ### Latest Versions
 
-- **macOS (Apple Silicon)**: `JITRACK-macOS-arm64.zip`
+- **macOS (Apple Silicon)**: `JITRACK-macOS-arm64.dmg`
 - **Windows (x64)**: `JITRACK-Windows-amd64.exe`
 
 ## Chrome Extension

@@ -19,5 +19,32 @@
     "copyright": "Copyright © 2024",
     "comments": "JIRA Time Tracker"
   },
-  "nsisType": "multiple"
+  "nsisType": "multiple",
+  "build": {
+    "darwin": {
+      "dmg": {
+        "title": "JITRACK Installer",
+        "icon": "build/appicon.png",
+        "background": "build/dmg-background.png",
+        "windowSize": {
+          "width": 600,
+          "height": 400
+        },
+        "contents": [
+          {
+            "x": 180,
+            "y": 200,
+            "type": "file",
+            "path": "JITRACK.app"
+          },
+          {
+            "x": 420,
+            "y": 200,
+            "type": "link",
+            "path": "/Applications"
+          }
+        ]
+      }
+    }
+  }
 }
