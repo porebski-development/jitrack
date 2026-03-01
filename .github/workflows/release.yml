@@ -1,0 +1,101 @@
+name: Build Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Build macOS
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: wails build -platform darwin/arm64 -ldflags "-s -w -X main.version=$VERSION"
+
+      - name: Package macOS
+        run: |
+          cd build/bin
+          zip -r ../../JITRACK-macOS-arm64.zip jitrack.app
+
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: JITRACK-macOS-arm64.zip
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Build Windows
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: wails build -platform windows/amd64 -ldflags "-s -w -X main.version=$env:VERSION"
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: build/bin/JITRACK.exe
+
+  release:
+    needs: [build-macos, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download macOS
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+
+      - name: Download Windows
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-build
+
+      - name: Rename Windows Binary
+        run: mv JITRACK.exe JITRACK-Windows-amd64.exe
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            JITRACK-macOS-arm64.zip
+            JITRACK-Windows-amd64.exe
+          generate_release_notes: true

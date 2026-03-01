@@ -1,0 +1,41 @@
+# Build outputs
+build/bin
+frontend/dist
+*.exe
+*.zip
+*.dmg
+*.app
+
+# Dependencies
+node_modules
+vendor/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+.env.local
+
+# Release documentation (keep in repo but not in distribution)
+RELEASE_WORKFLOW.md
+
+# Test outputs
+coverage/
+*.test
+
+# Temporary files
+tmp/
+temp/

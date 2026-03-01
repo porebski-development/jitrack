@@ -1,0 +1,23 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "jitrack",
+  "outputfilename": "JITRACK",
+  "frontend": {
+    "dir": "./frontend",
+    "install": "npm install",
+    "build": "npm run build",
+    "package": "npm run package"
+  },
+  "author": {
+    "name": "Mikołaj Porebski",
+    "email": "mikolaj.porebski@nnv.pl"
+  },
+  "info": {
+    "companyName": "NNV",
+    "productName": "JITRACK",
+    "productVersion": "2.0.0",
+    "copyright": "Copyright © 2024",
+    "comments": "JIRA Time Tracker"
+  },
+  "nsisType": "multiple"
+}
