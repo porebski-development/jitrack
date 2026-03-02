@@ -13,8 +13,8 @@
   let showDeleteModal = false;
   let deleteIssueKey: string | null = null;
   
-  $: incompleteTasks = $tasksStore.filter(t => !t.is_completed);
-  $: completedTasks = $tasksStore.filter(t => t.is_completed).slice(0, 5);
+  $: incompleteTasks = ($tasksStore || []).filter(t => !t.is_completed);
+  $: completedTasks = ($tasksStore || []).filter(t => t.is_completed).slice(0, 5);
   
   // Get timer state
   let timerState: any = { isRunning: false, issueKey: null };
@@ -29,7 +29,7 @@
   
   onMount(async () => {
     // Load worklog times for progress bars
-    for (const task of $tasksStore) {
+    for (const task of ($tasksStore || [])) {
       const worklogs = await GetWorklogs(task.issue_key);
       const totalSeconds = worklogs?.reduce((sum: number, w: any) => sum + (w.duration_seconds || 0), 0) || 0;
       worklogTimes[task.issue_key] = totalSeconds;

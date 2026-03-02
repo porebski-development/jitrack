@@ -12,7 +12,7 @@ export interface Task {
 }
 
 export const tasksStore = writable<Task[]>([]);
-export const tasksFilter = writable<'all' | 'active' | 'completed'>('active');
+export const tasksFilter = writable<'all' | 'active' | 'completed'>('all');
 
 export const setTasks = (tasks: Task[]) => {
   tasksStore.set(tasks);

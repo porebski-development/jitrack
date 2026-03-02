@@ -30,7 +30,7 @@
     }
   }
   
-  $: filteredTasks = $tasksStore.filter(task => {
+  $: filteredTasks = ($tasksStore || []).filter(task => {
     // Filter by status
     if ($tasksFilter === 'active' && task.is_completed) return false;
     if ($tasksFilter === 'completed' && !task.is_completed) return false;
