@@ -38,6 +38,9 @@ jobs:
       - name: Generate Wails bindings
         run: wails generate bindings
 
+      - name: Build frontend
+        run: cd frontend && npm run build
+
       - name: Build macOS
         env:
           VERSION: ${{ github.ref_name }}
@@ -91,6 +94,9 @@ jobs:
 
       - name: Generate Wails bindings
         run: wails generate bindings
+
+      - name: Build frontend
+        run: cd frontend && npm run build
 
       - name: Build Windows
         env:
